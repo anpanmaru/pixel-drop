@@ -246,7 +246,7 @@
         }
 
         .ctrl-btn.wide {
-            width: calc(90px * 2 + 8px); /* Match two move buttons + gap */
+            width: calc(90px + 64px + 90px + 8px * 2); /* Match ← ▼ → buttons + gaps */
             font-size: 13px;
             font-weight: 700;
             letter-spacing: 2px;
@@ -254,10 +254,16 @@
 
         .ctrl-btn.rotate-cw {
             background: rgba(100, 200, 255, 0.2);
+            width: 77px;  /* 64px * 1.2 */
+            height: 77px;
+            font-size: 32px;
         }
 
         .ctrl-btn.rotate-ccw {
             background: rgba(200, 100, 255, 0.2);
+            width: 77px;  /* 64px * 1.2 */
+            height: 77px;
+            font-size: 32px;
         }
 
         .ctrl-btn.drop {
@@ -391,7 +397,12 @@
                 width: 100px;
             }
             .ctrl-btn.wide {
-                width: calc(100px * 2 + 8px);
+                width: calc(100px + 72px + 100px + 8px * 2);
+            }
+            .ctrl-btn.rotate-cw,
+            .ctrl-btn.rotate-ccw {
+                width: 86px;
+                height: 86px;
             }
         }
 
@@ -405,7 +416,12 @@
                 width: 100px;
             }
             .ctrl-btn.wide {
-                width: calc(100px * 2 + 10px);
+                width: calc(100px + 72px + 100px + 10px * 2);
+            }
+            .ctrl-btn.rotate-cw,
+            .ctrl-btn.rotate-ccw {
+                width: 86px;
+                height: 86px;
             }
             .control-row {
                 gap: 10px;
@@ -472,18 +488,21 @@
             </div>
             <div class="control-row">
                 <button class="ctrl-btn move" id="leftBtn">◀</button>
+                <button class="ctrl-btn" id="softDownBtn">▼</button>
                 <button class="ctrl-btn move" id="rightBtn">▶</button>
             </div>
             <div class="control-row">
-                <button class="ctrl-btn wide down" id="downBtn">▼ FAST</button>
+                <button class="ctrl-btn wide down" id="downBtn">⏬ FAST</button>
             </div>
         </div>
 
-        <!-- Right Hand: Rotation -->
+        <!-- Right Hand: Rotation (vertical) -->
         <div class="control-side right">
             <div class="control-row">
-                <button class="ctrl-btn rotate-ccw" id="rotateCcwBtn">↺</button>
                 <button class="ctrl-btn rotate-cw" id="rotateCwBtn">↻</button>
+            </div>
+            <div class="control-row">
+                <button class="ctrl-btn rotate-ccw" id="rotateCcwBtn">↺</button>
             </div>
         </div>
     </div>
@@ -1062,6 +1081,15 @@
         downBtn.addEventListener('mousedown', startSoftDrop);
         downBtn.addEventListener('mouseup', stopSoftDrop);
         downBtn.addEventListener('mouseleave', stopSoftDrop);
+
+        // Soft down button (single tap = 1 cell drop)
+        document.getElementById('softDownBtn').addEventListener('click', () => {
+            if (gameRunning && !paused) {
+                score++;
+                pieceDrop();
+                if (navigator.vibrate) navigator.vibrate(10);
+            }
+        });
 
         document.getElementById('rotateCwBtn').addEventListener('click', () => {
             if (gameRunning && !paused) rotatePiece(true); // Clockwise (順転)
