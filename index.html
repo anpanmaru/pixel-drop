@@ -746,59 +746,58 @@
             const lineW = Math.max(2, Math.floor(pSize / 8)); // Line width scales with block size
             
             const patternDefs = {
-                // Small dot pattern
-                'dot': (c, s) => {
+                // Solid half patterns
+                'vStripes': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
                     c.fillStyle = '#000';
-                    c.beginPath();
-                    c.arc(s / 2, s / 2, s / 6, 0, Math.PI * 2);
-                    c.fill();
+                    c.fillRect(0, 0, Math.floor(s / 2), s);
                 },
-                // TRIANGLE PATTERNS
-                'triUp': (c, s) => {
+                'hStripes': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.fillStyle = '#000';
+                    c.fillRect(0, 0, s, Math.floor(s / 2));
+                },
+                // Diagonal half patterns
+                'd1Stripes': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
                     c.fillStyle = '#000';
                     c.beginPath();
-                    c.moveTo(s / 2, s * 0.2);
-                    c.lineTo(s * 0.8, s * 0.8);
-                    c.lineTo(s * 0.2, s * 0.8);
+                    c.moveTo(0, 0);
+                    c.lineTo(s, 0);
+                    c.lineTo(0, s);
                     c.closePath();
                     c.fill();
                 },
-                'triDown': (c, s) => {
+                'd2Stripes': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
                     c.fillStyle = '#000';
                     c.beginPath();
-                    c.moveTo(s / 2, s * 0.8);
-                    c.lineTo(s * 0.8, s * 0.2);
-                    c.lineTo(s * 0.2, s * 0.2);
+                    c.moveTo(s, 0);
+                    c.lineTo(s, s);
+                    c.lineTo(0, s);
                     c.closePath();
                     c.fill();
                 },
-                'triLeft': (c, s) => {
+                // Dot pattern
+                'dots': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
                     c.fillStyle = '#000';
                     c.beginPath();
-                    c.moveTo(s * 0.2, s / 2);
-                    c.lineTo(s * 0.8, s * 0.2);
-                    c.lineTo(s * 0.8, s * 0.8);
-                    c.closePath();
+                    c.arc(s / 2, s / 2, s / 4, 0, Math.PI * 2);
                     c.fill();
                 },
-                'triRight': (c, s) => {
+                // Checker pattern
+                'grid': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
                     c.fillStyle = '#000';
-                    c.beginPath();
-                    c.moveTo(s * 0.8, s / 2);
-                    c.lineTo(s * 0.2, s * 0.2);
-                    c.lineTo(s * 0.2, s * 0.8);
-                    c.closePath();
-                    c.fill();
+                    c.fillRect(0, 0, Math.floor(s / 2), Math.floor(s / 2));
+                    c.fillRect(Math.floor(s / 2), Math.floor(s / 2), Math.floor(s / 2), Math.floor(s / 2));
                 },
                 // LINE PATTERNS
                 'vLine': (c, s) => {
@@ -840,20 +839,6 @@
                     c.beginPath();
                     c.moveTo(0, 0);
                     c.lineTo(s, s);
-                    c.stroke();
-                },
-                // X pattern
-                'xLine': (c, s) => {
-                    c.fillStyle = '#fff';
-                    c.fillRect(0, 0, s, s);
-                    c.strokeStyle = '#000';
-                    c.lineWidth = lineW;
-                    c.lineCap = 'square';
-                    c.beginPath();
-                    c.moveTo(0, 0);
-                    c.lineTo(s, s);
-                    c.moveTo(s, 0);
-                    c.lineTo(0, s);
                     c.stroke();
                 }
             };
