@@ -1296,9 +1296,9 @@
             context.restore();
             
             // Add subtle white border (outside clip)
-            context.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-            context.lineWidth = 2;
-            context.strokeRect(px + inset, py + inset, blockW, blockH);
+            context.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            context.lineWidth = 1;
+            context.strokeRect(px + inset + 0.5, py + inset + 0.5, blockW - 1, blockH - 1);
         }
 
         function updateUI() {
