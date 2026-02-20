@@ -46,33 +46,95 @@
             pointer-events: none;
         }
 
-        /* Header */
-        .header {
+        /* Main Game Container */
+        .main-container {
+            flex: 1;
             width: 100%;
-            padding: 12px 16px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-shrink: 0;
+            justify-content: center;
+            position: relative;
+            min-height: 0;
         }
 
-        .logo {
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .header-buttons {
+        /* Side Panels - Floating overlays */
+        .side-panel {
+            position: absolute;
+            top: 8px;
             display: flex;
+            flex-direction: column;
             gap: 8px;
+            z-index: 10;
         }
 
+        .side-panel.left {
+            left: 8px;
+        }
+
+        .side-panel.right {
+            right: 8px;
+        }
+
+        /* Stats (left side) */
+        .stat-item {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 8px 12px;
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .stat-label {
+            font-size: 0.55rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            opacity: 0.6;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Next Piece Panel (left side, below stats) */
+        .next-panel {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .next-label {
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+
+        #nextCanvas {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+        }
+
+        /* Control Buttons (right side) */
         .icon-btn {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             border: none;
             color: white;
             font-size: 18px;
@@ -88,58 +150,7 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Stats Bar */
-        .stats-bar {
-            width: 100%;
-            padding: 8px 16px;
-            display: flex;
-            justify-content: space-around;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        .stat-item {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 10px 8px;
-            text-align: center;
-        }
-
-        .stat-label {
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            opacity: 0.6;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        .stat-value {
-            font-size: 1.3rem;
-            font-weight: 800;
-            font-variant-numeric: tabular-nums;
-        }
-
-        /* Game Area */
-        .game-area {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
-            width: 100%;
-            min-height: 0;
-        }
-
-        .game-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            max-height: 100%;
-        }
-
+        /* Game Canvas - Centered and maximized */
         #gameCanvas {
             background: rgba(0, 0, 0, 0.6);
             border-radius: 8px;
@@ -155,27 +166,6 @@
             25% { transform: translate(-2px, 1px); }
             50% { transform: translate(2px, -1px); }
             75% { transform: translate(-2px, 1px); }
-        }
-
-        /* Next Piece Panel */
-        .next-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .next-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            opacity: 0.5;
-            text-align: center;
-        }
-
-        #nextCanvas {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
         }
 
         /* Controls */
@@ -443,39 +433,35 @@
 <body>
     <canvas id="backgroundCanvas"></canvas>
 
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">PIXEL DROP</div>
-        <div class="header-buttons">
-            <button class="icon-btn" id="pauseBtn">⏸</button>
-            <button class="icon-btn" id="restartBtn">↺</button>
-        </div>
-    </div>
-
-    <!-- Stats -->
-    <div class="stats-bar">
-        <div class="stat-item">
-            <div class="stat-label">Score</div>
-            <div class="stat-value" id="scoreValue">0</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label">Level</div>
-            <div class="stat-value" id="level">1</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label">Lines</div>
-            <div class="stat-value" id="lines">0</div>
-        </div>
-    </div>
-
-    <!-- Game Area -->
-    <div class="game-area">
-        <div class="game-wrapper">
-            <canvas id="gameCanvas"></canvas>
+    <!-- Main Game Container -->
+    <div class="main-container">
+        <!-- Left Side Panel: Stats + Next -->
+        <div class="side-panel left">
+            <div class="stat-item">
+                <div class="stat-label">Score</div>
+                <div class="stat-value" id="scoreValue">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Lv</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Lines</div>
+                <div class="stat-value" id="lines">0</div>
+            </div>
             <div class="next-panel">
                 <div class="next-label">Next</div>
                 <canvas id="nextCanvas"></canvas>
             </div>
+        </div>
+
+        <!-- Game Canvas - Centered -->
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- Right Side Panel: Buttons -->
+        <div class="side-panel right">
+            <button class="icon-btn" id="pauseBtn">⏸</button>
+            <button class="icon-btn" id="restartBtn">↺</button>
         </div>
     </div>
 
@@ -544,20 +530,25 @@
 
         // Calculate optimal block size based on screen
         function calculateBlockSize() {
-            const gameArea = document.querySelector('.game-area');
-            const availableHeight = gameArea.clientHeight - 20;
-            const availableWidth = gameArea.clientWidth - 100; // Account for next panel
+            const mainContainer = document.querySelector('.main-container');
+            const controls = document.querySelector('.controls');
+            const controlsHeight = controls ? controls.offsetHeight : 200;
+            
+            // Available space: full width minus side panels, height minus controls
+            const availableHeight = mainContainer.clientHeight - 16;
+            const availableWidth = window.innerWidth - 160; // Account for side panels
             
             const maxBlockByHeight = Math.floor(availableHeight / BOARD_HEIGHT);
             const maxBlockByWidth = Math.floor(availableWidth / BOARD_WIDTH);
             
-            BLOCK_SIZE = Math.min(maxBlockByHeight, maxBlockByWidth, 28);
+            BLOCK_SIZE = Math.min(maxBlockByHeight, maxBlockByWidth, 32);
             BLOCK_SIZE = Math.max(BLOCK_SIZE, 16); // Minimum size
             
             canvas.width = BOARD_WIDTH * BLOCK_SIZE;
             canvas.height = BOARD_HEIGHT * BLOCK_SIZE;
             
-            const nextBlockSize = Math.floor(BLOCK_SIZE * 0.8);
+            // Smaller next piece preview
+            const nextBlockSize = Math.min(Math.floor(BLOCK_SIZE * 0.6), 16);
             nextCanvas.width = 4 * nextBlockSize;
             nextCanvas.height = 4 * nextBlockSize;
         }
@@ -1026,19 +1017,71 @@
         document.getElementById('resumeBtn').addEventListener('click', togglePause);
 
         // Touch controls
-        document.getElementById('leftBtn').addEventListener('click', () => {
+        // Left/Right buttons with hold-to-repeat
+        let leftInterval = null;
+        let rightInterval = null;
+        const moveRepeatDelay = 150; // ms between moves when holding
+
+        function moveLeft() {
             if (gameRunning && !paused && isValidMove(currentPiece, -1, 0)) {
                 currentPiece.x--;
                 if (navigator.vibrate) navigator.vibrate(10);
             }
-        });
+        }
 
-        document.getElementById('rightBtn').addEventListener('click', () => {
+        function moveRight() {
             if (gameRunning && !paused && isValidMove(currentPiece, 1, 0)) {
                 currentPiece.x++;
                 if (navigator.vibrate) navigator.vibrate(10);
             }
-        });
+        }
+
+        function startMoveLeft() {
+            if (leftInterval) return;
+            moveLeft();
+            leftInterval = setInterval(moveLeft, moveRepeatDelay);
+        }
+
+        function stopMoveLeft() {
+            if (leftInterval) {
+                clearInterval(leftInterval);
+                leftInterval = null;
+            }
+        }
+
+        function startMoveRight() {
+            if (rightInterval) return;
+            moveRight();
+            rightInterval = setInterval(moveRight, moveRepeatDelay);
+        }
+
+        function stopMoveRight() {
+            if (rightInterval) {
+                clearInterval(rightInterval);
+                rightInterval = null;
+            }
+        }
+
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+
+        // Touch events
+        leftBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startMoveLeft(); });
+        leftBtn.addEventListener('touchend', (e) => { e.preventDefault(); stopMoveLeft(); });
+        leftBtn.addEventListener('touchcancel', stopMoveLeft);
+
+        rightBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startMoveRight(); });
+        rightBtn.addEventListener('touchend', (e) => { e.preventDefault(); stopMoveRight(); });
+        rightBtn.addEventListener('touchcancel', stopMoveRight);
+
+        // Mouse events
+        leftBtn.addEventListener('mousedown', startMoveLeft);
+        leftBtn.addEventListener('mouseup', stopMoveLeft);
+        leftBtn.addEventListener('mouseleave', stopMoveLeft);
+
+        rightBtn.addEventListener('mousedown', startMoveRight);
+        rightBtn.addEventListener('mouseup', stopMoveRight);
+        rightBtn.addEventListener('mouseleave', stopMoveRight);
 
         // Soft drop - hold to speed up
         const normalDropInterval = () => Math.max(100, 600 - (level - 1) * 50);
