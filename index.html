@@ -625,7 +625,12 @@
         }
 
         .drop-in {
-            animation: dropIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation: dropIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .drop-in-delayed {
+            animation: dropIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation-delay: 0.15s;
         }
 
         /* Responsive adjustments for larger screens */
@@ -811,10 +816,18 @@
             const mainContainer = document.querySelector('.main-container');
             const controls = document.querySelector('.controls');
             
+            // Remove previous animation classes
+            mainContainer.classList.remove('drop-in');
+            controls.classList.remove('drop-in-delayed');
+            
             mainContainer.style.display = 'flex';
             controls.style.display = 'flex';
+            
+            // Trigger reflow to restart animation
+            void mainContainer.offsetWidth;
+            
             mainContainer.classList.add('drop-in');
-            controls.classList.add('drop-in');
+            controls.classList.add('drop-in-delayed');
         }
 
         // DOM Elements
@@ -1506,7 +1519,8 @@
         document.getElementById('restartBtn').addEventListener('click', () => {
             pauseOverlay.classList.remove('show');
             paused = false;
-            init();
+            gameRunning = false;
+            showTitleScreen();
         });
         document.getElementById('playAgainBtn').addEventListener('click', init);
         document.getElementById('resumeBtn').addEventListener('click', togglePause);
