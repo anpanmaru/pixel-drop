@@ -176,14 +176,20 @@
         }
 
         .shake {
-            animation: shake 0.2s ease-in-out;
+            animation: shake 0.3s ease-in-out;
         }
 
         @keyframes shake {
             0%, 100% { transform: translate(0, 0); }
-            25% { transform: translate(-2px, 1px); }
-            50% { transform: translate(2px, -1px); }
-            75% { transform: translate(-2px, 1px); }
+            10% { transform: translate(-6px, 3px); }
+            20% { transform: translate(6px, -3px); }
+            30% { transform: translate(-5px, 2px); }
+            40% { transform: translate(5px, -2px); }
+            50% { transform: translate(-4px, 2px); }
+            60% { transform: translate(4px, -1px); }
+            70% { transform: translate(-3px, 1px); }
+            80% { transform: translate(3px, -1px); }
+            90% { transform: translate(-2px, 1px); }
         }
 
         /* Controls */
@@ -926,14 +932,14 @@
 
         function triggerShake(intensity = 1) {
             canvas.classList.add('shake');
-            shockwave = 20 + (intensity * 5);
+            shockwave = 40 + (intensity * 8);
             
             // Haptic feedback
             if (navigator.vibrate) {
                 navigator.vibrate(30);
             }
             
-            setTimeout(() => canvas.classList.remove('shake'), 200);
+            setTimeout(() => canvas.classList.remove('shake'), 300);
         }
 
         function pieceDrop() {
