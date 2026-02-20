@@ -637,9 +637,10 @@
             backgroundCanvas.width = window.innerWidth;
             backgroundCanvas.height = window.innerHeight;
             waves = [
-                { color: 'rgba(80, 120, 200, 0.3)', amplitude: 30, frequency: 0.008, phase: 0, speed: 0.005 },
-                { color: 'rgba(100, 80, 180, 0.25)', amplitude: 40, frequency: 0.006, phase: 2, speed: 0.004 },
-                { color: 'rgba(60, 140, 160, 0.2)', amplitude: 25, frequency: 0.01, phase: 4, speed: 0.006 }
+                { color: 'rgba(200, 80, 100, 0.25)', amplitude: 35, frequency: 0.007, phase: 0, speed: 0.004 },
+                { color: 'rgba(80, 120, 200, 0.3)', amplitude: 30, frequency: 0.008, phase: 1.5, speed: 0.005 },
+                { color: 'rgba(140, 80, 180, 0.25)', amplitude: 40, frequency: 0.006, phase: 3, speed: 0.004 },
+                { color: 'rgba(60, 160, 140, 0.2)', amplitude: 25, frequency: 0.01, phase: 4.5, speed: 0.006 }
             ];
         }
 
@@ -769,9 +770,9 @@
             requestAnimationFrame(gameLoop);
         }
 
-        function triggerShake() {
+        function triggerShake(intensity = 1) {
             canvas.classList.add('shake');
-            shockwave = 30;
+            shockwave = 20 + (intensity * 5);
             
             // Haptic feedback
             if (navigator.vibrate) {
@@ -927,7 +928,12 @@
             }
             score += rowsDropped * 2;
             
-            if (navigator.vibrate) navigator.vibrate([20, 10, 40]);
+            // Haptic feedback based on drop distance
+            const vibration = Math.min(rowsDropped * 5, 50);
+            if (navigator.vibrate) navigator.vibrate([vibration, 10, vibration * 1.5]);
+            
+            // Trigger shake with intensity based on drop distance
+            triggerShake(rowsDropped);
             
             pieceDrop();
         }
