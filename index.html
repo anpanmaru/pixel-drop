@@ -127,21 +127,26 @@
             border-radius: 6px;
         }
 
-        /* Side Drop Button */
+        /* Side Drop Button - Fixed to bottom left */
         .side-drop-btn {
+            position: absolute;
+            left: 8px;
+            bottom: 8px;
             background: rgba(255, 100, 100, 0.3);
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
             border: none;
             border-radius: 10px;
             color: white;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 1px;
-            padding: 12px 8px;
+            padding: 16px 12px;
+            min-width: 60px;
             cursor: pointer;
             transition: all 0.1s;
             text-align: center;
+            z-index: 10;
         }
 
         .side-drop-btn:active {
@@ -457,7 +462,7 @@
 
     <!-- Main Game Container -->
     <div class="main-container">
-        <!-- Left Side Panel: Stats + Next + Drop -->
+        <!-- Left Side Panel: Stats + Next -->
         <div class="side-panel left">
             <div class="stat-item">
                 <div class="stat-label">Score</div>
@@ -475,8 +480,10 @@
                 <div class="next-label">Next</div>
                 <canvas id="nextCanvas"></canvas>
             </div>
-            <button class="side-drop-btn" id="dropBtn">DROP</button>
         </div>
+
+        <!-- Drop Button - Bottom Left -->
+        <button class="side-drop-btn" id="dropBtn">DROP</button>
 
         <!-- Game Canvas - Centered -->
         <canvas id="gameCanvas"></canvas>
