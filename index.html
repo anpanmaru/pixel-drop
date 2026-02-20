@@ -730,24 +730,27 @@
         function createPatternSet(context, blockSize) {
             const pSize = blockSize || 24;
             const tempPatterns = {};
+            const lineW = Math.max(2, Math.floor(pSize / 8)); // Line width scales with block size
             
             const patternDefs = {
+                // Solid half patterns
                 'vStripes': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
-                    c.fillStyle = 'rgba(0, 0, 0, 0.25)';
+                    c.fillStyle = '#000';
                     c.fillRect(0, 0, Math.floor(s / 2), s);
                 },
                 'hStripes': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
-                    c.fillStyle = 'rgba(0, 0, 0, 0.25)';
+                    c.fillStyle = '#000';
                     c.fillRect(0, 0, s, Math.floor(s / 2));
                 },
+                // Diagonal half patterns
                 'd1Stripes': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
-                    c.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                    c.fillStyle = '#000';
                     c.beginPath();
                     c.moveTo(0, 0);
                     c.lineTo(s, 0);
@@ -758,7 +761,7 @@
                 'd2Stripes': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
-                    c.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                    c.fillStyle = '#000';
                     c.beginPath();
                     c.moveTo(s, 0);
                     c.lineTo(s, s);
@@ -766,20 +769,64 @@
                     c.closePath();
                     c.fill();
                 },
+                // Dot pattern
                 'dots': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
-                    c.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                    c.fillStyle = '#000';
                     c.beginPath();
                     c.arc(s / 2, s / 2, s / 4, 0, Math.PI * 2);
                     c.fill();
                 },
+                // Checker pattern
                 'grid': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
-                    c.fillStyle = 'rgba(0, 0, 0, 0.15)';
+                    c.fillStyle = '#000';
                     c.fillRect(0, 0, Math.floor(s / 2), Math.floor(s / 2));
                     c.fillRect(Math.floor(s / 2), Math.floor(s / 2), Math.floor(s / 2), Math.floor(s / 2));
+                },
+                // LINE PATTERNS - New!
+                'vLine': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.fillStyle = '#000';
+                    c.fillRect(Math.floor((s - lineW) / 2), 0, lineW, s);
+                },
+                'hLine': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.fillStyle = '#000';
+                    c.fillRect(0, Math.floor((s - lineW) / 2), s, lineW);
+                },
+                'cross': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.fillStyle = '#000';
+                    c.fillRect(Math.floor((s - lineW) / 2), 0, lineW, s);
+                    c.fillRect(0, Math.floor((s - lineW) / 2), s, lineW);
+                },
+                'd1Line': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.strokeStyle = '#000';
+                    c.lineWidth = lineW;
+                    c.lineCap = 'square';
+                    c.beginPath();
+                    c.moveTo(0, s);
+                    c.lineTo(s, 0);
+                    c.stroke();
+                },
+                'd2Line': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.strokeStyle = '#000';
+                    c.lineWidth = lineW;
+                    c.lineCap = 'square';
+                    c.beginPath();
+                    c.moveTo(0, 0);
+                    c.lineTo(s, s);
+                    c.stroke();
                 }
             };
             
