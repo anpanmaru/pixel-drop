@@ -69,7 +69,8 @@
             gap: 4px;
             z-index: 10;
             flex-shrink: 0;
-            width: 55px; /* Same width for both panels */
+            min-width: 55px;
+            width: auto;
         }
 
         .side-panel.left {
@@ -88,7 +89,8 @@
             border-radius: 8px;
             padding: 4px 6px;
             text-align: center;
-            width: 50px;
+            min-width: 50px;
+            width: auto;
         }
 
         .stat-label {
@@ -105,7 +107,7 @@
             font-weight: 800;
             font-variant-numeric: tabular-nums;
             white-space: nowrap;
-            overflow: hidden;
+            min-width: 40px;
         }
 
         /* Next Piece Panel (left side, below stats) */
