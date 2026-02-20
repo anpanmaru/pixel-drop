@@ -246,7 +246,7 @@
         }
 
         .ctrl-btn.wide {
-            width: 140px;
+            width: calc(90px * 2 + 8px); /* Match two move buttons + gap */
             font-size: 13px;
             font-weight: 700;
             letter-spacing: 2px;
@@ -387,8 +387,11 @@
                 width: 72px;
                 height: 72px;
             }
+            .ctrl-btn.move {
+                width: 100px;
+            }
             .ctrl-btn.wide {
-                width: 160px;
+                width: calc(100px * 2 + 8px);
             }
         }
 
@@ -398,8 +401,11 @@
                 height: 72px;
                 border-radius: 20px;
             }
+            .ctrl-btn.move {
+                width: 100px;
+            }
             .ctrl-btn.wide {
-                width: 160px;
+                width: calc(100px * 2 + 10px);
             }
             .control-row {
                 gap: 10px;
