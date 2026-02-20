@@ -726,16 +726,61 @@
             });
         }
 
-        // Pattern creation
-        function createPatternSet(context) {
-            const pSize = 10, lw = 3, tempPatterns = {};
+        // Pattern creation - Clean and crisp patterns
+        function createPatternSet(context, blockSize) {
+            const pSize = blockSize || 24;
+            const tempPatterns = {};
+            
             const patternDefs = {
-                'vStripes': (c, s) => { c.strokeStyle = '#000'; c.lineWidth = lw; c.beginPath(); c.moveTo(s / 2, 0); c.lineTo(s / 2, s); c.stroke(); },
-                'hStripes': (c, s) => { c.strokeStyle = '#000'; c.lineWidth = lw; c.beginPath(); c.moveTo(0, s / 2); c.lineTo(s, s / 2); c.stroke(); },
-                'd1Stripes': (c, s) => { c.strokeStyle = '#000'; c.lineWidth = lw; c.beginPath(); c.moveTo(0, s); c.lineTo(s, 0); c.stroke(); },
-                'd2Stripes': (c, s) => { c.strokeStyle = '#000'; c.lineWidth = lw; c.beginPath(); c.moveTo(0, 0); c.lineTo(s, s); c.stroke(); },
-                'dots': (c, s) => { c.fillStyle = '#000'; c.beginPath(); c.arc(s / 2, s / 2, s / 4, 0, Math.PI * 2); c.fill(); },
-                'grid': (c, s) => { c.strokeStyle = '#000'; c.lineWidth = lw/2; c.beginPath(); c.moveTo(0, s/2); c.lineTo(s, s/2); c.moveTo(s/2, 0); c.lineTo(s/2, s); c.stroke(); }
+                'vStripes': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.fillStyle = 'rgba(0, 0, 0, 0.25)';
+                    c.fillRect(0, 0, Math.floor(s / 2), s);
+                },
+                'hStripes': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.fillStyle = 'rgba(0, 0, 0, 0.25)';
+                    c.fillRect(0, 0, s, Math.floor(s / 2));
+                },
+                'd1Stripes': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                    c.beginPath();
+                    c.moveTo(0, 0);
+                    c.lineTo(s, 0);
+                    c.lineTo(0, s);
+                    c.closePath();
+                    c.fill();
+                },
+                'd2Stripes': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                    c.beginPath();
+                    c.moveTo(s, 0);
+                    c.lineTo(s, s);
+                    c.lineTo(0, s);
+                    c.closePath();
+                    c.fill();
+                },
+                'dots': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                    c.beginPath();
+                    c.arc(s / 2, s / 2, s / 4, 0, Math.PI * 2);
+                    c.fill();
+                },
+                'grid': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.fillStyle = 'rgba(0, 0, 0, 0.15)';
+                    c.fillRect(0, 0, Math.floor(s / 2), Math.floor(s / 2));
+                    c.fillRect(Math.floor(s / 2), Math.floor(s / 2), Math.floor(s / 2), Math.floor(s / 2));
+                }
             };
             
             for (const [key, drawFunc] of Object.entries(patternDefs)) {
@@ -743,6 +788,7 @@
                 const pCtx = pCanvas.getContext('2d');
                 pCanvas.width = pSize;
                 pCanvas.height = pSize;
+                pCtx.imageSmoothingEnabled = false;
                 drawFunc(pCtx, pSize);
                 tempPatterns[key] = context.createPattern(pCanvas, 'repeat');
             }
@@ -763,8 +809,8 @@
         // Game initialization
         function init() {
             calculateBlockSize();
-            patterns = createPatternSet(ctx);
-            nextPatterns = createPatternSet(nextCtx);
+            patterns = createPatternSet(ctx, BLOCK_SIZE);
+            nextPatterns = createPatternSet(nextCtx, Math.floor(BLOCK_SIZE * 0.8));
             patternKeys = [...Object.keys(patterns), null, null];
             particles = [];
             board = Array.from({ length: BOARD_HEIGHT }, () => Array(BOARD_WIDTH).fill(0));
@@ -1115,31 +1161,45 @@
             nextCtx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
             nextCtx.fillStyle = 'rgba(255, 255, 255, 0.05)';
             nextCtx.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
+            nextCtx.imageSmoothingEnabled = false;
             
             if (nextPiece) {
                 const pieceWidth = nextPiece.shape[0].length * nextBlockSize;
                 const pieceHeight = nextPiece.shape.length * nextBlockSize;
-                const startX = (nextCanvas.width - pieceWidth) / 2;
-                const startY = (nextCanvas.height - pieceHeight) / 2;
+                const startX = Math.floor((nextCanvas.width - pieceWidth) / 2);
+                const startY = Math.floor((nextCanvas.height - pieceHeight) / 2);
+                const inset = 1;
                 
                 nextPiece.shape.forEach((row, y) => {
                     row.forEach((value, x) => {
                         if (value) {
-                            const px = startX + x * nextBlockSize;
-                            const py = startY + y * nextBlockSize;
+                            const px = Math.floor(startX + x * nextBlockSize);
+                            const py = Math.floor(startY + y * nextBlockSize);
+                            const blockW = nextBlockSize - inset * 2;
+                            const blockH = nextBlockSize - inset * 2;
                             
+                            nextCtx.save();
+                            
+                            // Base block
                             nextCtx.fillStyle = '#fff';
-                            nextCtx.fillRect(px + 1, py + 1, nextBlockSize - 2, nextBlockSize - 2);
+                            nextCtx.fillRect(px + inset, py + inset, blockW, blockH);
                             
+                            // Pattern
                             if (nextPiece.pattern && nextPatterns[nextPiece.pattern]) {
-                                nextCtx.save();
                                 nextCtx.beginPath();
-                                nextCtx.rect(px + 1, py + 1, nextBlockSize - 2, nextBlockSize - 2);
+                                nextCtx.rect(px + inset, py + inset, blockW, blockH);
                                 nextCtx.clip();
+                                nextCtx.translate(px + inset, py + inset);
                                 nextCtx.fillStyle = nextPatterns[nextPiece.pattern];
-                                nextCtx.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
-                                nextCtx.restore();
+                                nextCtx.fillRect(0, 0, blockW, blockH);
                             }
+                            
+                            nextCtx.restore();
+                            
+                            // Border
+                            nextCtx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+                            nextCtx.lineWidth = 1;
+                            nextCtx.strokeRect(px + inset + 0.5, py + inset + 0.5, blockW - 1, blockH - 1);
                         }
                     });
                 });
@@ -1147,21 +1207,37 @@
         }
 
         function drawBlock(x, y, patternId, context, size) {
-            const px = x * size;
-            const py = y * size;
+            const px = Math.floor(x * size);
+            const py = Math.floor(y * size);
+            const inset = 1;
+            const blockW = size - inset * 2;
+            const blockH = size - inset * 2;
             const patternSet = (context === nextCtx) ? nextPatterns : patterns;
             
             context.save();
-            context.fillStyle = '#fff';
-            context.fillRect(px + 1, py + 1, size - 2, size - 2);
+            context.imageSmoothingEnabled = false;
             
+            // Draw base block
+            context.fillStyle = '#fff';
+            context.fillRect(px + inset, py + inset, blockW, blockH);
+            
+            // Apply pattern aligned to block position
             if (patternId && patternSet[patternId]) {
                 context.beginPath();
-                context.rect(px + 1, py + 1, size - 2, size - 2);
+                context.rect(px + inset, py + inset, blockW, blockH);
                 context.clip();
+                
+                // Translate to align pattern with block grid
+                context.translate(px + inset, py + inset);
                 context.fillStyle = patternSet[patternId];
-                context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+                context.fillRect(0, 0, blockW, blockH);
             }
+            
+            // Add subtle border for depth
+            context.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+            context.lineWidth = 1;
+            context.strokeRect(px + inset + 0.5, py + inset + 0.5, blockW - 1, blockH - 1);
+            
             context.restore();
         }
 
