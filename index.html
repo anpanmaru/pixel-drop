@@ -628,11 +628,6 @@
             animation: dropIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
-        .drop-in-delayed {
-            animation: dropIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            animation-delay: 0.15s;
-        }
-
         /* Responsive adjustments for larger screens */
         @media (min-width: 500px) {
             .ctrl-btn {
@@ -818,7 +813,7 @@
             
             // Remove previous animation classes
             mainContainer.classList.remove('drop-in');
-            controls.classList.remove('drop-in-delayed');
+            controls.classList.remove('drop-in');
             
             mainContainer.style.display = 'flex';
             controls.style.display = 'flex';
@@ -827,7 +822,7 @@
             void mainContainer.offsetWidth;
             
             mainContainer.classList.add('drop-in');
-            controls.classList.add('drop-in-delayed');
+            controls.classList.add('drop-in');
         }
 
         // DOM Elements
@@ -1715,7 +1710,10 @@
         startBtn.addEventListener('click', () => {
             if (navigator.vibrate) navigator.vibrate(15);
             hideTitleScreen();
-            init();
+            // UIが落ちてくるのを待ってからゲーム開始
+            setTimeout(() => {
+                init();
+            }, 800);
         });
 
         // Initialize - show title screen with background
