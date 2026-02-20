@@ -134,13 +134,17 @@
             border-radius: 6px;
         }
 
-        /* Small Drop Button - Above move buttons */
-        .ctrl-btn.drop-small {
-            width: calc(90px * 2 + 8px);
-            height: 44px;
-            font-size: 10px;
-            font-weight: 600;
+        /* Circle Drop Button - Left side */
+        .ctrl-btn.drop-circle {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            font-size: 9px;
+            font-weight: 700;
             letter-spacing: 1px;
+            position: relative;
+            top: -20px;
+            margin-right: 8px;
         }
 
         /* Control Buttons (right side) */
@@ -203,7 +207,8 @@
         }
 
         .control-side.left {
-            align-items: flex-start;
+            flex-direction: row;
+            align-items: flex-end;
         }
 
         .control-side.right {
@@ -288,11 +293,12 @@
             border-radius: 3px;
         }
 
-        /* Top button - rounded top corners */
-        .btn-group .ctrl-btn.drop-small {
-            border-radius: 13px 13px 3px 3px;
-            width: calc(86px * 2 + 3px);
-            height: 36px;
+        /* Top row buttons - rounded top corners */
+        .btn-group .btn-row:first-child .ctrl-btn:first-child {
+            border-top-left-radius: 13px;
+        }
+        .btn-group .btn-row:first-child .ctrl-btn:last-child {
+            border-top-right-radius: 13px;
         }
 
         /* Middle buttons */
@@ -588,8 +594,8 @@
     <div class="controls">
         <!-- Left Hand: Movement -->
         <div class="control-side left">
+            <button class="ctrl-btn drop-circle" id="dropBtn">DROP</button>
             <div class="btn-group">
-                <button class="ctrl-btn drop-small" id="dropBtn">DROP</button>
                 <div class="btn-row">
                     <button class="ctrl-btn move" id="leftBtn">◀</button>
                     <button class="ctrl-btn move" id="rightBtn">▶</button>
