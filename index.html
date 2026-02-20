@@ -327,44 +327,36 @@
         /* DROP BONUS popup */
         .bonus-popup {
             position: fixed;
-            top: 50%;
+            top: 45%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 20px #ff6b6b, 0 0 40px #feca57, 0 0 60px #ff9ff3;
+            transform: translate(-50%, -50%) scale(0.9);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.7);
             z-index: 500;
             pointer-events: none;
             opacity: 0;
-            transition: none;
         }
 
         .bonus-popup.show {
-            animation: bonusPop 1.2s ease-out forwards;
+            animation: bonusPop 0.8s ease-out forwards;
         }
 
         @keyframes bonusPop {
             0% {
-                transform: translate(-50%, -50%) scale(0) rotate(-10deg);
+                transform: translate(-50%, -50%) scale(0.9);
                 opacity: 0;
             }
             20% {
-                transform: translate(-50%, -50%) scale(1.3) rotate(5deg);
-                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.8;
             }
-            40% {
-                transform: translate(-50%, -50%) scale(1) rotate(-3deg);
-            }
-            60% {
-                transform: translate(-50%, -50%) scale(1.1) rotate(2deg);
-            }
-            80% {
-                transform: translate(-50%, -50%) scale(1) rotate(0deg);
-                opacity: 1;
+            70% {
+                opacity: 0.6;
             }
             100% {
-                transform: translate(-50%, -60%) scale(0.8);
+                transform: translate(-50%, -60%) scale(1);
                 opacity: 0;
             }
         }
@@ -609,7 +601,7 @@
     </div>
 
     <!-- Bonus Popup -->
-    <div class="bonus-popup" id="bonusPopup">🎉 DROP BONUS! 🎉</div>
+    <div class="bonus-popup" id="bonusPopup">DROP BONUS</div>
 
     <!-- Game Over Overlay -->
     <div class="game-over" id="gameOver">
@@ -1077,38 +1069,38 @@
         }
 
         function drawPiece(piece, context) {
-            // Calculate piece center for rotation effect
+            // Calculate piece center for rotation
             const centerX = (piece.x + piece.shape[0].length / 2) * BLOCK_SIZE;
             const centerY = (piece.y + piece.shape.length / 2) * BLOCK_SIZE;
             
-            // Draw rotation animation effect
+            // Apply rotation animation
             if (rotationAnimation > 0) {
-                const angle = rotationAnimation * Math.PI * 0.5 * rotationDirection;
-                const scale = 1 + rotationAnimation * 0.15;
-                const alpha = rotationAnimation * 0.6;
+                // Rotation angle: starts from where it was (90° back) and rotates to current position
+                const angle = -rotationAnimation * (Math.PI / 2) * rotationDirection;
                 
-                // Draw rotating glow ring
                 context.save();
-                context.globalAlpha = alpha;
-                context.strokeStyle = '#fff';
-                context.lineWidth = 3;
-                context.shadowColor = '#fff';
-                context.shadowBlur = 15;
-                context.beginPath();
-                context.arc(centerX, centerY, BLOCK_SIZE * 1.5, angle, angle + Math.PI * 1.5);
-                context.stroke();
+                context.translate(centerX, centerY);
+                context.rotate(angle);
+                context.translate(-centerX, -centerY);
+                
+                piece.shape.forEach((row, y) => {
+                    row.forEach((value, x) => {
+                        if (value) drawBlock(piece.x + x, piece.y + y, piece.pattern, context, BLOCK_SIZE);
+                    });
+                });
+                
                 context.restore();
                 
-                // Decay animation
-                rotationAnimation *= 0.85;
-                if (rotationAnimation < 0.05) rotationAnimation = 0;
-            }
-            
-            piece.shape.forEach((row, y) => {
-                row.forEach((value, x) => {
-                    if (value) drawBlock(piece.x + x, piece.y + y, piece.pattern, context, BLOCK_SIZE);
+                // Decay animation (fast)
+                rotationAnimation -= 0.15;
+                if (rotationAnimation < 0) rotationAnimation = 0;
+            } else {
+                piece.shape.forEach((row, y) => {
+                    row.forEach((value, x) => {
+                        if (value) drawBlock(piece.x + x, piece.y + y, piece.pattern, context, BLOCK_SIZE);
+                    });
                 });
-            });
+            }
         }
 
         function drawNextPiece() {
