@@ -526,6 +526,8 @@
                 <div class="stat-label">Lines</div>
                 <div class="stat-value" id="lines">0</div>
             </div>
+        </div>
+        <div class="side-panel right">
             <div class="next-panel">
                 <div class="next-label">Next</div>
                 <canvas id="nextCanvas"></canvas>
@@ -785,6 +787,10 @@
         function pieceDrop() {
             if (isValidMove(currentPiece, 0, 1)) {
                 currentPiece.y++;
+                // FAST: 押している間1ずつスコア加算
+                if (softDropping) {
+                    score += 1;
+                }
             } else {
                 triggerShake();
                 placePiece();
@@ -904,7 +910,13 @@
                 }
                 
                 lines += linesToClear.length;
-                score += (linesToClear.length * 100 * linesToClear.length) * level;
+                let lineScore = (linesToClear.length * 100 * linesToClear.length) * level;
+                // DROPで消した場合は2倍
+                if (lastDropWasHard) {
+                    lineScore *= 2;
+                }
+                score += lineScore;
+                lastDropWasHard = false;
                 
                 const newLevel = Math.floor(lines / 5) + 1;
                 if (newLevel > level) {
@@ -920,13 +932,18 @@
             }
         }
 
+        let lastDropWasHard = false;
+        let hardDropRows = 0;
+        
         function hardDrop() {
             let rowsDropped = 0;
             while (isValidMove(currentPiece, 0, 1)) {
                 currentPiece.y++;
                 rowsDropped++;
             }
-            score += rowsDropped * 2;
+            score += rowsDropped * 5; // DROP: 高さ * 5
+            hardDropRows = rowsDropped;
+            lastDropWasHard = true;
             
             // Haptic feedback based on drop distance
             const vibration = Math.min(rowsDropped * 5, 50);
