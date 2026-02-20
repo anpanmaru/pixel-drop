@@ -127,6 +127,28 @@
             border-radius: 6px;
         }
 
+        /* Side Drop Button */
+        .side-drop-btn {
+            background: rgba(255, 100, 100, 0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 12px 8px;
+            cursor: pointer;
+            transition: all 0.1s;
+            text-align: center;
+        }
+
+        .side-drop-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 100, 100, 0.5);
+        }
+
         /* Control Buttons (right side) */
         .icon-btn {
             width: 44px;
@@ -237,9 +259,9 @@
 
         .ctrl-btn.wide {
             width: calc(90px * 2 + 8px); /* Match ← → buttons + gap */
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         .ctrl-btn.rotate-cw {
@@ -435,7 +457,7 @@
 
     <!-- Main Game Container -->
     <div class="main-container">
-        <!-- Left Side Panel: Stats + Next -->
+        <!-- Left Side Panel: Stats + Next + Drop -->
         <div class="side-panel left">
             <div class="stat-item">
                 <div class="stat-label">Score</div>
@@ -453,6 +475,7 @@
                 <div class="next-label">Next</div>
                 <canvas id="nextCanvas"></canvas>
             </div>
+            <button class="side-drop-btn" id="dropBtn">DROP</button>
         </div>
 
         <!-- Game Canvas - Centered -->
@@ -467,11 +490,8 @@
 
     <!-- Touch Controls - Two-handed layout -->
     <div class="controls">
-        <!-- Left Hand: Movement + Drop -->
+        <!-- Left Hand: Movement -->
         <div class="control-side left">
-            <div class="control-row">
-                <button class="ctrl-btn wide drop" id="dropBtn">DROP</button>
-            </div>
             <div class="control-row">
                 <button class="ctrl-btn move" id="leftBtn">◀</button>
                 <button class="ctrl-btn move" id="rightBtn">▶</button>
