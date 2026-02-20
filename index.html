@@ -136,6 +136,36 @@
             border-radius: 6px;
         }
 
+        /* UNDO Button */
+        .ctrl-btn.undo-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 7px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.2;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        .ctrl-btn.undo-btn:not(:disabled) {
+            opacity: 1;
+            pointer-events: auto;
+            background: rgba(255, 200, 100, 0.15);
+            border-color: rgba(255, 200, 100, 0.3);
+        }
+        
+        .undo-cost {
+            font-size: 6px;
+            opacity: 0.7;
+        }
+
         /* Circle Drop Button - Left side */
         .ctrl-btn.drop-circle {
             width: 51px;
@@ -603,6 +633,7 @@
     <div class="controls">
         <!-- Left Hand: Movement -->
         <div class="control-side left">
+            <button class="ctrl-btn undo-btn" id="undoBtn" disabled>UNDO<span class="undo-cost">-1000</span></button>
             <button class="ctrl-btn drop-circle" id="dropBtn">DROP</button>
             <div class="btn-group">
                 <div class="btn-row">
@@ -703,6 +734,55 @@
         let dropCounter, dropInterval, gameRunning, paused, lastTime;
         let waves = [], shockwave = 0;
         let softDropping = false;
+        
+        // UNDO system
+        let canUndo = false;
+        let savedState = null;
+        const UNDO_COST = 1000;
+        const undoBtn = document.getElementById('undoBtn');
+        
+        function saveState() {
+            savedState = {
+                board: board.map(row => row.map(cell => cell ? {...cell} : 0)),
+                score: score,
+                level: level,
+                lines: lines,
+                currentPiece: JSON.parse(JSON.stringify(currentPiece)),
+                nextPiece: JSON.parse(JSON.stringify(nextPiece))
+            };
+        }
+        
+        function enableUndo() {
+            if (score >= UNDO_COST && savedState) {
+                canUndo = true;
+                undoBtn.disabled = false;
+            }
+        }
+        
+        function disableUndo() {
+            canUndo = false;
+            undoBtn.disabled = true;
+            savedState = null;
+        }
+        
+        function performUndo() {
+            if (!canUndo || score < UNDO_COST || !savedState) return;
+            
+            // Deduct cost
+            score -= UNDO_COST;
+            
+            // Restore state
+            board = savedState.board.map(row => row.map(cell => cell ? {...cell} : 0));
+            currentPiece = JSON.parse(JSON.stringify(savedState.currentPiece));
+            nextPiece = JSON.parse(JSON.stringify(savedState.nextPiece));
+            // Keep current score (minus cost), level, lines
+            
+            updateUI();
+            drawNextPiece();
+            disableUndo();
+            
+            if (navigator.vibrate) navigator.vibrate([20, 10, 20]);
+        }
 
         // Background setup
         function setupBackground() {
@@ -885,6 +965,7 @@
             gameRunning = true;
             paused = false;
             lastTime = 0;
+            disableUndo(); // Reset UNDO state
             nextPiece = createPiece();
             spawnNewPiece();
             updateUI();
@@ -956,9 +1037,20 @@
                     score += 1;
                 }
             } else {
+                // Save state before placing piece (for UNDO)
+                saveState();
+                
                 triggerShake();
                 placePiece();
-                clearLines();
+                const linesCleared = clearLines();
+                
+                // Enable UNDO only if no lines were cleared
+                if (linesCleared === 0) {
+                    enableUndo();
+                } else {
+                    disableUndo();
+                }
+                
                 spawnNewPiece();
             }
             dropCounter = 0;
@@ -1099,6 +1191,8 @@
                 
                 updateUI();
             }
+            
+            return linesToClear.length;
         }
 
         let lastDropWasHard = false;
@@ -1473,6 +1567,12 @@
             if (gameRunning && !paused) {
                 if (navigator.vibrate) navigator.vibrate(15);
                 hardDrop();
+            }
+        });
+        
+        document.getElementById('undoBtn').addEventListener('click', () => {
+            if (gameRunning && !paused) {
+                performUndo();
             }
         });
 
