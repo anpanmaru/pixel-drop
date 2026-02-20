@@ -205,6 +205,19 @@
             justify-content: flex-end;
         }
 
+        .control-side.center {
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ctrl-btn.pause-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            font-size: 20px;
+            border-radius: 50%;
+        }
+
         .control-row {
             display: flex;
             justify-content: center;
@@ -367,16 +380,36 @@
             margin-bottom: 30px;
         }
 
-        .resume-btn {
-            padding: 16px 40px;
+        .pause-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 200px;
+        }
+
+        .pause-action-btn {
+            padding: 16px 24px;
             font-size: 1rem;
             font-weight: 700;
             letter-spacing: 2px;
-            background: white;
-            color: #0a0a0a;
             border: none;
             border-radius: 14px;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pause-action-btn.resume {
+            background: white;
+            color: #0a0a0a;
+        }
+
+        .pause-action-btn.restart {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .pause-action-btn:active {
+            transform: scale(0.95);
         }
 
         /* Level Up Animation */
@@ -472,11 +505,6 @@
         <!-- Game Canvas - Centered -->
         <canvas id="gameCanvas"></canvas>
 
-        <!-- Right Side Panel: Buttons -->
-        <div class="side-panel right">
-            <button class="icon-btn" id="pauseBtn">⏸</button>
-            <button class="icon-btn" id="restartBtn">↺</button>
-        </div>
     </div>
 
     <!-- Touch Controls - Two-handed layout -->
@@ -493,6 +521,11 @@
             <div class="control-row">
                 <button class="ctrl-btn wide down" id="downBtn">▼ FAST</button>
             </div>
+        </div>
+
+        <!-- Center: Pause Button -->
+        <div class="control-side center">
+            <button class="ctrl-btn pause-btn" id="pauseBtn">⏸</button>
         </div>
 
         <!-- Right Hand: Rotation (vertical) -->
@@ -517,7 +550,10 @@
     <!-- Pause Overlay -->
     <div class="pause-overlay" id="pauseOverlay">
         <h2>PAUSED</h2>
-        <button class="resume-btn" id="resumeBtn">RESUME</button>
+        <div class="pause-buttons">
+            <button class="pause-action-btn resume" id="resumeBtn">▶ RESUME</button>
+            <button class="pause-action-btn restart" id="restartBtn">↺ RESTART</button>
+        </div>
     </div>
 
     <script>
@@ -1026,7 +1062,11 @@
 
         // Event listeners
         document.getElementById('pauseBtn').addEventListener('click', togglePause);
-        document.getElementById('restartBtn').addEventListener('click', init);
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            pauseOverlay.classList.remove('show');
+            paused = false;
+            init();
+        });
         document.getElementById('playAgainBtn').addEventListener('click', init);
         document.getElementById('resumeBtn').addEventListener('click', togglePause);
 
