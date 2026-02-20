@@ -606,6 +606,28 @@
             100% { transform: scale(1); }
         }
 
+        /* Drop-in animation for game start */
+        @keyframes dropIn {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+            60% {
+                transform: translateY(20px);
+                opacity: 1;
+            }
+            80% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .drop-in {
+            animation: dropIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
         /* Responsive adjustments for larger screens */
         @media (min-width: 500px) {
             .ctrl-btn {
@@ -786,8 +808,13 @@
         
         function hideTitleScreen() {
             titleScreen.classList.add('hidden');
-            document.querySelector('.main-container').style.display = 'flex';
-            document.querySelector('.controls').style.display = 'flex';
+            const mainContainer = document.querySelector('.main-container');
+            const controls = document.querySelector('.controls');
+            
+            mainContainer.style.display = 'flex';
+            controls.style.display = 'flex';
+            mainContainer.classList.add('drop-in');
+            controls.classList.add('drop-in');
         }
 
         // DOM Elements
