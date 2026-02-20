@@ -367,9 +367,9 @@
         .game-over {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             display: none;
             flex-direction: column;
             align-items: center;
@@ -383,45 +383,45 @@
         }
 
         .game-over h2 {
-            font-size: 2.5rem;
-            font-weight: 900;
-            letter-spacing: 4px;
-            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
             text-transform: uppercase;
+            opacity: 0.6;
         }
 
         .game-over .subtitle {
-            font-size: 0.9rem;
-            opacity: 0.5;
-            margin-bottom: 30px;
+            font-size: 0.55rem;
+            opacity: 0.4;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
         }
 
         .final-score {
-            font-size: 4rem;
-            font-weight: 900;
-            margin-bottom: 40px;
-            background: linear-gradient(135deg, #fff 0%, #aaa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .play-again-btn {
-            padding: 18px 48px;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 2px;
+            padding: 12px 32px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            background: white;
-            color: #0a0a0a;
-            border: none;
-            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
         .play-again-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.97);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         /* Pause Overlay */
@@ -443,42 +443,44 @@
         }
 
         .pause-overlay h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            opacity: 0.6;
         }
 
         .pause-buttons {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            width: 200px;
+            gap: 8px;
+            width: 140px;
         }
 
         .pause-action-btn {
-            padding: 16px 24px;
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            border: none;
-            border-radius: 14px;
+            padding: 10px 16px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
         .pause-action-btn.resume {
-            background: white;
-            color: #0a0a0a;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .pause-action-btn.restart {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .pause-action-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.97);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         /* Level Up Animation */
