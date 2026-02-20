@@ -227,8 +227,8 @@
             letter-spacing: 2px;
             border-radius: 50%;
             position: relative;
-            top: -20px;
-            left: -15px;
+            top: -24px;
+            left: -11px;
         }
 
         .control-row {
@@ -259,10 +259,52 @@
         }
 
         .ctrl-btn.wide {
-            width: calc(90px * 2 + 8px);
+            width: calc(90px * 2 + 4px);
             font-size: 10px;
             font-weight: 600;
             letter-spacing: 1px;
+        }
+
+        /* Button group styling for unified look */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .btn-group .btn-row {
+            display: flex;
+            gap: 4px;
+        }
+
+        .btn-group .ctrl-btn {
+            border-radius: 4px;
+        }
+
+        /* Top button - rounded top corners */
+        .btn-group .ctrl-btn.drop-small {
+            border-radius: 16px 16px 4px 4px;
+            width: calc(90px * 2 + 4px);
+        }
+
+        /* Middle buttons */
+        .btn-group .ctrl-btn.move {
+            border-radius: 4px;
+            width: 90px;
+        }
+
+        .btn-group .ctrl-btn.move:first-child {
+            border-radius: 4px 4px 4px 16px;
+        }
+
+        .btn-group .ctrl-btn.move:last-child {
+            border-radius: 4px 4px 16px 4px;
+        }
+
+        /* Bottom button - rounded bottom corners */
+        .btn-group .ctrl-btn.down {
+            border-radius: 4px 4px 16px 16px;
+            width: calc(90px * 2 + 4px);
         }
 
         .ctrl-btn.rotate-cw,
@@ -501,14 +543,12 @@
     <div class="controls">
         <!-- Left Hand: Movement -->
         <div class="control-side left">
-            <div class="control-row">
+            <div class="btn-group">
                 <button class="ctrl-btn drop-small" id="dropBtn">DROP</button>
-            </div>
-            <div class="control-row">
-                <button class="ctrl-btn move" id="leftBtn">◀</button>
-                <button class="ctrl-btn move" id="rightBtn">▶</button>
-            </div>
-            <div class="control-row">
+                <div class="btn-row">
+                    <button class="ctrl-btn move" id="leftBtn">◀</button>
+                    <button class="ctrl-btn move" id="rightBtn">▶</button>
+                </div>
                 <button class="ctrl-btn wide down" id="downBtn">▼ FAST</button>
             </div>
         </div>
