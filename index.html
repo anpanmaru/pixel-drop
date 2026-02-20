@@ -185,14 +185,14 @@
             flex-shrink: 0;
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
+            align-items: stretch;
             gap: 20px;
         }
 
         .control-side {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            justify-content: flex-end;
             gap: 8px;
         }
 
@@ -202,6 +202,7 @@
 
         .control-side.right {
             align-items: flex-end;
+            justify-content: flex-end;
         }
 
         .control-row {
@@ -254,16 +255,18 @@
 
         .ctrl-btn.rotate-cw {
             background: rgba(100, 200, 255, 0.2);
-            width: 77px;  /* 64px * 1.2 */
-            height: 77px;
-            font-size: 32px;
+            width: 90px;
+            height: 90px;
+            font-size: 38px;
+            border-radius: 22px;
         }
 
         .ctrl-btn.rotate-ccw {
             background: rgba(200, 100, 255, 0.2);
-            width: 77px;  /* 64px * 1.2 */
-            height: 77px;
-            font-size: 32px;
+            width: 90px;
+            height: 90px;
+            font-size: 38px;
+            border-radius: 22px;
         }
 
         .ctrl-btn.drop {
