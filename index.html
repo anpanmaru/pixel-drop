@@ -183,27 +183,41 @@
             width: 100%;
             padding: 12px 16px 20px;
             flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+        }
+
+        .control-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-side.left {
+            align-items: flex-start;
+        }
+
+        .control-side.right {
+            align-items: flex-end;
         }
 
         .control-row {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .control-row:last-child {
-            margin-bottom: 0;
+            gap: 8px;
         }
 
         .ctrl-btn {
-            width: 72px;
-            height: 72px;
-            border-radius: 20px;
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
             background: rgba(255, 255, 255, 0.12);
             border: none;
             color: white;
-            font-size: 28px;
+            font-size: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -232,18 +246,26 @@
         }
 
         .ctrl-btn.wide {
-            width: 160px;
-            font-size: 14px;
+            width: 140px;
+            font-size: 13px;
             font-weight: 700;
             letter-spacing: 2px;
         }
 
-        .ctrl-btn.rotate {
+        .ctrl-btn.rotate-cw {
             background: rgba(100, 200, 255, 0.2);
+        }
+
+        .ctrl-btn.rotate-ccw {
+            background: rgba(200, 100, 255, 0.2);
         }
 
         .ctrl-btn.drop {
             background: rgba(255, 100, 100, 0.2);
+        }
+
+        .ctrl-btn.down {
+            background: rgba(255, 200, 100, 0.2);
         }
 
         /* Game Over Overlay */
@@ -358,33 +380,35 @@
         /* Responsive adjustments for larger screens */
         @media (min-width: 500px) {
             .ctrl-btn {
-                width: 80px;
-                height: 80px;
+                width: 72px;
+                height: 72px;
             }
             .ctrl-btn.wide {
-                width: 180px;
+                width: 160px;
             }
         }
 
         @media (min-height: 800px) {
             .ctrl-btn {
-                width: 80px;
-                height: 80px;
-                border-radius: 22px;
+                width: 72px;
+                height: 72px;
+                border-radius: 20px;
             }
             .ctrl-btn.wide {
-                width: 180px;
+                width: 160px;
             }
             .control-row {
-                gap: 16px;
-                margin-bottom: 16px;
+                gap: 10px;
+            }
+            .control-side {
+                gap: 10px;
             }
         }
 
         /* Desktop styles */
         @media (min-width: 768px) and (min-height: 600px) {
             .controls {
-                max-width: 400px;
+                max-width: 500px;
                 margin: 0 auto;
             }
         }
@@ -429,18 +453,28 @@
         </div>
     </div>
 
-    <!-- Touch Controls -->
+    <!-- Touch Controls - Two-handed layout -->
     <div class="controls">
-        <div class="control-row">
-            <button class="ctrl-btn rotate" id="rotateBtn">↻</button>
+        <!-- Left Hand: Movement + Drop -->
+        <div class="control-side left">
+            <div class="control-row">
+                <button class="ctrl-btn down" id="downBtn">▼</button>
+            </div>
+            <div class="control-row">
+                <button class="ctrl-btn" id="leftBtn">◀</button>
+                <button class="ctrl-btn" id="rightBtn">▶</button>
+            </div>
+            <div class="control-row">
+                <button class="ctrl-btn wide drop" id="dropBtn">DROP</button>
+            </div>
         </div>
-        <div class="control-row">
-            <button class="ctrl-btn" id="leftBtn">◀</button>
-            <button class="ctrl-btn" id="downBtn">▼</button>
-            <button class="ctrl-btn" id="rightBtn">▶</button>
-        </div>
-        <div class="control-row">
-            <button class="ctrl-btn wide drop" id="dropBtn">DROP</button>
+
+        <!-- Right Hand: Rotation -->
+        <div class="control-side right">
+            <div class="control-row">
+                <button class="ctrl-btn rotate-ccw" id="rotateCcwBtn">↺</button>
+                <button class="ctrl-btn rotate-cw" id="rotateCwBtn">↻</button>
+            </div>
         </div>
     </div>
 
@@ -681,11 +715,21 @@
             return true;
         }
 
-        function rotatePiece() {
+        function rotatePiece(clockwise = true) {
             const originalShape = currentPiece.shape;
-            const rotated = originalShape[0].map((_, colIndex) =>
-                originalShape.map(row => row[colIndex]).reverse()
-            );
+            let rotated;
+            
+            if (clockwise) {
+                // Clockwise rotation (順転)
+                rotated = originalShape[0].map((_, colIndex) =>
+                    originalShape.map(row => row[colIndex]).reverse()
+                );
+            } else {
+                // Counter-clockwise rotation (反転)
+                rotated = originalShape[0].map((_, colIndex) =>
+                    originalShape.map(row => row[row.length - 1 - colIndex])
+                );
+            }
             
             let offsetX = 0;
             if (!isValidMove(currentPiece, 0, 0, rotated)) {
@@ -971,8 +1015,12 @@
             }
         });
 
-        document.getElementById('rotateBtn').addEventListener('click', () => {
-            if (gameRunning && !paused) rotatePiece();
+        document.getElementById('rotateCwBtn').addEventListener('click', () => {
+            if (gameRunning && !paused) rotatePiece(true); // Clockwise (順転)
+        });
+
+        document.getElementById('rotateCcwBtn').addEventListener('click', () => {
+            if (gameRunning && !paused) rotatePiece(false); // Counter-clockwise (反転)
         });
 
         document.getElementById('dropBtn').addEventListener('click', () => {
@@ -982,7 +1030,7 @@
         // Keyboard controls (for desktop)
         document.addEventListener('keydown', (e) => {
             if (!gameRunning || paused) return;
-            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'z', 'Z', 'x', 'X'].includes(e.key)) {
                 e.preventDefault();
             }
             
@@ -1001,7 +1049,13 @@
                     hardDrop();
                     break;
                 case ' ':
-                    rotatePiece();
+                case 'x':
+                case 'X':
+                    rotatePiece(true); // Clockwise
+                    break;
+                case 'z':
+                case 'Z':
+                    rotatePiece(false); // Counter-clockwise
                     break;
                 case 'p':
                 case 'P':
