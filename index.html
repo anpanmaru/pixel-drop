@@ -246,7 +246,7 @@
         }
 
         .ctrl-btn.wide {
-            width: calc(90px + 64px + 90px + 8px * 2); /* Match ← ▼ → buttons + gaps */
+            width: calc(90px * 2 + 8px); /* Match ← → buttons + gap */
             font-size: 13px;
             font-weight: 700;
             letter-spacing: 2px;
@@ -397,7 +397,7 @@
                 width: 100px;
             }
             .ctrl-btn.wide {
-                width: calc(100px + 72px + 100px + 8px * 2);
+                width: calc(100px * 2 + 8px);
             }
             .ctrl-btn.rotate-cw,
             .ctrl-btn.rotate-ccw {
@@ -416,7 +416,7 @@
                 width: 100px;
             }
             .ctrl-btn.wide {
-                width: calc(100px + 72px + 100px + 10px * 2);
+                width: calc(100px * 2 + 10px);
             }
             .ctrl-btn.rotate-cw,
             .ctrl-btn.rotate-ccw {
@@ -488,11 +488,10 @@
             </div>
             <div class="control-row">
                 <button class="ctrl-btn move" id="leftBtn">◀</button>
-                <button class="ctrl-btn" id="softDownBtn">▼</button>
                 <button class="ctrl-btn move" id="rightBtn">▶</button>
             </div>
             <div class="control-row">
-                <button class="ctrl-btn wide down" id="downBtn">⏬ FAST</button>
+                <button class="ctrl-btn wide down" id="downBtn">▼ FAST</button>
             </div>
         </div>
 
@@ -1082,14 +1081,6 @@
         downBtn.addEventListener('mouseup', stopSoftDrop);
         downBtn.addEventListener('mouseleave', stopSoftDrop);
 
-        // Soft down button (single tap = 1 cell drop)
-        document.getElementById('softDownBtn').addEventListener('click', () => {
-            if (gameRunning && !paused) {
-                score++;
-                pieceDrop();
-                if (navigator.vibrate) navigator.vibrate(10);
-            }
-        });
 
         document.getElementById('rotateCwBtn').addEventListener('click', () => {
             if (gameRunning && !paused) rotatePiece(true); // Clockwise (順転)
