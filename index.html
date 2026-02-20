@@ -204,13 +204,25 @@
             justify-content: flex-end;
         }
 
+        .control-side.staggered {
+            align-items: stretch;
+        }
+
+        .control-row.stagger-left {
+            justify-content: flex-start;
+        }
+
+        .control-row.stagger-right {
+            justify-content: flex-end;
+        }
+
         .ctrl-btn.pause-btn {
-            width: calc(80px * 2 + 8px); /* Match rotation buttons + gap */
-            height: 44px;
+            width: 60px;
+            height: 60px;
             font-size: 14px;
             font-weight: 800;
             letter-spacing: 2px;
-            border-radius: 12px;
+            border-radius: 50%;
         }
 
         .control-row {
@@ -490,14 +502,16 @@
             </div>
         </div>
 
-        <!-- Right Hand: Pause + Rotation -->
-        <div class="control-side right">
-            <div class="control-row">
+        <!-- Right Hand: Pause + Rotation (staggered layout) -->
+        <div class="control-side right staggered">
+            <div class="control-row stagger-left">
                 <button class="ctrl-btn pause-btn" id="pauseBtn">||</button>
             </div>
-            <div class="control-row">
-                <button class="ctrl-btn rotate-ccw" id="rotateCcwBtn">↺</button>
+            <div class="control-row stagger-right">
                 <button class="ctrl-btn rotate-cw" id="rotateCwBtn">↻</button>
+            </div>
+            <div class="control-row stagger-left">
+                <button class="ctrl-btn rotate-ccw" id="rotateCcwBtn">↺</button>
             </div>
         </div>
     </div>
