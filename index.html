@@ -136,15 +136,15 @@
 
         /* Circle Drop Button - Left side */
         .ctrl-btn.drop-circle {
-            width: 54px;
-            height: 54px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
-            font-size: 9px;
+            font-size: 10px;
             font-weight: 700;
             letter-spacing: 1px;
             position: relative;
-            top: -20px;
-            margin-right: 8px;
+            top: -80px;
+            margin-right: 0px;
         }
 
         /* Control Buttons (right side) */
@@ -218,29 +218,27 @@
 
         .control-side.staggered-grid {
             display: grid;
-            grid-template-columns: 38px 77px;
-            grid-template-rows: auto auto;
-            gap: 6px;
-            align-items: end;
+            grid-template-columns: 85px 85px;
+            grid-template-rows: 85px 85px;
+            gap: 8px;
+            align-items: center;
             justify-items: center;
-            align-content: end;
         }
 
         .control-side.staggered-grid .spacer.large {
-            width: 77px;
-            height: 77px;
+            width: 85px;
+            height: 85px;
         }
 
         .ctrl-btn.pause-btn {
-            width: 38px;
-            height: 38px;
-            font-size: 10px;
+            width: 44px;
+            height: 44px;
+            font-size: 11px;
             font-weight: 800;
             letter-spacing: 2px;
             border-radius: 50%;
-            position: relative;
-            top: -16px;
-            left: -27px;
+            justify-self: start;
+            align-self: start;
         }
 
         .control-row {
@@ -293,39 +291,44 @@
             border-radius: 3px;
         }
 
-        /* Top row buttons - rounded top corners */
+        /* Top row buttons - large rounded top corners */
         .btn-group .btn-row:first-child .ctrl-btn:first-child {
-            border-top-left-radius: 13px;
+            border-top-left-radius: 20px;
         }
         .btn-group .btn-row:first-child .ctrl-btn:last-child {
-            border-top-right-radius: 13px;
+            border-top-right-radius: 20px;
         }
 
         /* Middle buttons */
         .btn-group .ctrl-btn.move {
-            border-radius: 3px;
+            border-radius: 4px;
             width: 86px;
-            height: 58px;
+            height: 70px;
         }
 
-        /* Bottom button - rounded bottom corners */
+        /* Bottom button - large rounded bottom corners */
         .btn-group .ctrl-btn.down {
-            border-radius: 3px 3px 13px 13px;
+            border-radius: 4px 4px 20px 20px;
             width: calc(86px * 2 + 3px);
-            height: 58px;
+            height: 70px;
         }
 
         .ctrl-btn.rotate-cw,
         .ctrl-btn.rotate-ccw {
-            width: 77px;
-            height: 77px;
-            font-size: 18px;
+            width: 85px;
+            height: 85px;
+            font-size: 22px;
             border-radius: 50%;
         }
 
+        .ctrl-btn.rotate-cw {
+            justify-self: end;
+            align-self: start;
+        }
+
         .ctrl-btn.rotate-ccw {
-            position: relative;
-            left: 8px;
+            justify-self: start;
+            align-self: end;
         }
 
         .ctrl-btn.move {
@@ -611,6 +614,7 @@
             <button class="ctrl-btn rotate-ccw" id="rotateCcwBtn">↺</button>
             <div class="spacer large"></div>
         </div>
+        <!-- Grid: row1=[pause, rotate-cw], row2=[rotate-ccw, spacer] -->
     </div>
 
     <!-- Bonus Popup -->
