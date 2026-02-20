@@ -268,6 +268,10 @@
             background: rgba(255, 200, 100, 0.2);
         }
 
+        .ctrl-btn.move {
+            width: 90px;
+        }
+
         /* Game Over Overlay */
         .game-over {
             position: fixed;
@@ -458,14 +462,14 @@
         <!-- Left Hand: Movement + Drop -->
         <div class="control-side left">
             <div class="control-row">
-                <button class="ctrl-btn down" id="downBtn">▼</button>
-            </div>
-            <div class="control-row">
-                <button class="ctrl-btn" id="leftBtn">◀</button>
-                <button class="ctrl-btn" id="rightBtn">▶</button>
-            </div>
-            <div class="control-row">
                 <button class="ctrl-btn wide drop" id="dropBtn">DROP</button>
+            </div>
+            <div class="control-row">
+                <button class="ctrl-btn move" id="leftBtn">◀</button>
+                <button class="ctrl-btn move" id="rightBtn">▶</button>
+            </div>
+            <div class="control-row">
+                <button class="ctrl-btn wide down" id="downBtn">▼ FAST</button>
             </div>
         </div>
 
@@ -539,6 +543,7 @@
         let board, currentPiece, nextPiece, score, level, lines;
         let dropCounter, dropInterval, gameRunning, paused, lastTime;
         let waves = [], shockwave = 0;
+        let softDropping = false;
 
         // Background setup
         function setupBackground() {
@@ -623,6 +628,7 @@
             lines = 0;
             dropCounter = 0;
             dropInterval = 600;
+            softDropping = false;
             gameRunning = true;
             paused = false;
             lastTime = 0;
@@ -815,7 +821,9 @@
                 const newLevel = Math.floor(lines / 5) + 1;
                 if (newLevel > level) {
                     level = newLevel;
-                    dropInterval = Math.max(100, 600 - (level - 1) * 50);
+                    if (!softDropping) {
+                        dropInterval = normalDropInterval();
+                    }
                     levelEl.classList.add('level-up');
                     setTimeout(() => levelEl.classList.remove('level-up'), 500);
                 }
@@ -1008,12 +1016,46 @@
             }
         });
 
-        document.getElementById('downBtn').addEventListener('click', () => {
-            if (gameRunning && !paused) {
-                score++;
-                pieceDrop();
+        // Soft drop - hold to speed up
+        const normalDropInterval = () => Math.max(100, 600 - (level - 1) * 50);
+        const softDropInterval = 50; // Fast drop speed
+
+        const downBtn = document.getElementById('downBtn');
+        
+        function startSoftDrop() {
+            if (gameRunning && !paused && !softDropping) {
+                softDropping = true;
+                dropInterval = softDropInterval;
+                if (navigator.vibrate) navigator.vibrate(10);
             }
+        }
+        
+        function stopSoftDrop() {
+            if (softDropping) {
+                softDropping = false;
+                dropInterval = normalDropInterval();
+            }
+        }
+        
+        // Touch events for soft drop
+        downBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startSoftDrop();
         });
+        
+        downBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            stopSoftDrop();
+        });
+        
+        downBtn.addEventListener('touchcancel', (e) => {
+            stopSoftDrop();
+        });
+        
+        // Mouse events for desktop
+        downBtn.addEventListener('mousedown', startSoftDrop);
+        downBtn.addEventListener('mouseup', stopSoftDrop);
+        downBtn.addEventListener('mouseleave', stopSoftDrop);
 
         document.getElementById('rotateCwBtn').addEventListener('click', () => {
             if (gameRunning && !paused) rotatePiece(true); // Clockwise (順転)
