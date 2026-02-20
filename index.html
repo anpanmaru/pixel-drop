@@ -333,6 +333,95 @@
             width: 90px;
         }
 
+        /* Title Screen */
+        .title-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            background: transparent;
+        }
+        
+        .title-screen.hidden {
+            display: none;
+        }
+        
+        .title-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 8px;
+            color: #fff;
+            text-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.5),
+                0 0 40px rgba(255, 255, 255, 0.3);
+            margin: 0;
+            line-height: 1.2;
+        }
+        
+        .title-drop {
+            display: block;
+            font-size: 3rem;
+            letter-spacing: 12px;
+            background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .high-score-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            margin-top: 16px;
+        }
+        
+        .high-score-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .high-score-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .start-btn {
+            margin-top: 24px;
+            padding: 16px 48px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .start-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
         /* Game Over Overlay */
         /* DROP BONUS popup */
         .bonus-popup {
@@ -567,6 +656,18 @@
 <body>
     <canvas id="backgroundCanvas"></canvas>
 
+    <!-- Title Screen -->
+    <div class="title-screen" id="titleScreen">
+        <div class="title-content">
+            <h1 class="game-title">PIXEL<span class="title-drop">DROP</span></h1>
+            <div class="high-score-display">
+                <span class="high-score-label">HIGH SCORE</span>
+                <span class="high-score-value" id="highScoreValue">0</span>
+            </div>
+            <button class="start-btn" id="startBtn">GAME START</button>
+        </div>
+    </div>
+
     <!-- Main Game Container -->
     <div class="main-container">
         <!-- Left Side Panel: Stats + Next -->
@@ -650,6 +751,32 @@
         const nextCtx = nextCanvas.getContext('2d');
         const backgroundCanvas = document.getElementById('backgroundCanvas');
         const bgCtx = backgroundCanvas.getContext('2d');
+
+        // Title Screen
+        const titleScreen = document.getElementById('titleScreen');
+        const startBtn = document.getElementById('startBtn');
+        const highScoreValueEl = document.getElementById('highScoreValue');
+        
+        // High Score
+        let highScore = parseInt(localStorage.getItem('pixelDropHighScore')) || 0;
+        highScoreValueEl.textContent = highScore.toLocaleString();
+        
+        function updateHighScore() {
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('pixelDropHighScore', highScore);
+                highScoreValueEl.textContent = highScore.toLocaleString();
+            }
+        }
+        
+        function showTitleScreen() {
+            highScoreValueEl.textContent = highScore.toLocaleString();
+            titleScreen.classList.remove('hidden');
+        }
+        
+        function hideTitleScreen() {
+            titleScreen.classList.add('hidden');
+        }
 
         // DOM Elements
         const scoreValueEl = document.getElementById('scoreValue');
@@ -1315,6 +1442,7 @@
 
         function gameOver() {
             gameRunning = false;
+            updateHighScore();
             finalScoreEl.textContent = score.toLocaleString();
             gameOverEl.classList.add('show');
             
@@ -1530,8 +1658,22 @@
             }
         }, { passive: false });
 
-        // Initialize game
-        init();
+        // Title screen start button
+        startBtn.addEventListener('click', () => {
+            if (navigator.vibrate) navigator.vibrate(15);
+            hideTitleScreen();
+            init();
+        });
+
+        // Initialize - show title screen with background
+        setupBackground();
+        function animateTitleBackground() {
+            if (!titleScreen.classList.contains('hidden')) {
+                drawBackground();
+                requestAnimationFrame(animateTitleBackground);
+            }
+        }
+        animateTitleBackground();
     </script>
 </body>
 </html>
