@@ -766,6 +766,7 @@
             if (!paused) {
                 dropCounter += deltaTime;
                 if (dropCounter > dropInterval) pieceDrop();
+                updateUI();
             }
 
             draw();
