@@ -339,36 +339,44 @@
         /* DROP BONUS popup */
         .bonus-popup {
             position: fixed;
-            top: 45%;
+            top: 15%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            font-size: 0.75rem;
+            transform: translate(-50%, 0) scale(0.9);
+            font-size: 0.7rem;
             font-weight: 600;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 
+                0 0 10px rgba(255, 255, 255, 0.8),
+                0 0 20px rgba(255, 255, 255, 0.5),
+                0 0 30px rgba(255, 255, 255, 0.3);
             z-index: 500;
             pointer-events: none;
             opacity: 0;
         }
 
         .bonus-popup.show {
-            animation: bonusPop 0.8s ease-out forwards;
+            animation: bonusPop 1s ease-out forwards;
         }
 
         @keyframes bonusPop {
             0% {
-                transform: translate(-50%, -50%) scale(0.9);
+                transform: translate(-50%, 0) scale(0.8);
                 opacity: 0;
             }
-            20% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.8;
+            15% {
+                transform: translate(-50%, 0) scale(1.1);
+                opacity: 1;
+            }
+            30% {
+                transform: translate(-50%, 0) scale(1);
+                opacity: 0.9;
             }
             70% {
-                opacity: 0.6;
+                opacity: 0.7;
             }
             100% {
-                transform: translate(-50%, -60%) scale(1);
+                transform: translate(-50%, -10px) scale(1);
                 opacity: 0;
             }
         }
@@ -742,60 +750,26 @@
             const lineW = Math.max(2, Math.floor(pSize / 8)); // Line width scales with block size
             
             const patternDefs = {
-                // Solid half patterns
-                'vStripes': (c, s) => {
-                    c.fillStyle = '#fff';
-                    c.fillRect(0, 0, s, s);
-                    c.fillStyle = '#000';
-                    c.fillRect(0, 0, Math.floor(s / 2), s);
-                },
-                'hStripes': (c, s) => {
-                    c.fillStyle = '#fff';
-                    c.fillRect(0, 0, s, s);
-                    c.fillStyle = '#000';
-                    c.fillRect(0, 0, s, Math.floor(s / 2));
-                },
-                // Diagonal half patterns
-                'd1Stripes': (c, s) => {
+                // Small dot pattern
+                'dot': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
                     c.fillStyle = '#000';
                     c.beginPath();
-                    c.moveTo(0, 0);
-                    c.lineTo(s, 0);
-                    c.lineTo(0, s);
-                    c.closePath();
+                    c.arc(s / 2, s / 2, s / 6, 0, Math.PI * 2);
                     c.fill();
                 },
-                'd2Stripes': (c, s) => {
+                // Corner dot pattern
+                'cornerDot': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
                     c.fillStyle = '#000';
+                    const r = s / 8;
                     c.beginPath();
-                    c.moveTo(s, 0);
-                    c.lineTo(s, s);
-                    c.lineTo(0, s);
-                    c.closePath();
+                    c.arc(r + 2, r + 2, r, 0, Math.PI * 2);
                     c.fill();
                 },
-                // Dot pattern
-                'dots': (c, s) => {
-                    c.fillStyle = '#fff';
-                    c.fillRect(0, 0, s, s);
-                    c.fillStyle = '#000';
-                    c.beginPath();
-                    c.arc(s / 2, s / 2, s / 4, 0, Math.PI * 2);
-                    c.fill();
-                },
-                // Checker pattern
-                'grid': (c, s) => {
-                    c.fillStyle = '#fff';
-                    c.fillRect(0, 0, s, s);
-                    c.fillStyle = '#000';
-                    c.fillRect(0, 0, Math.floor(s / 2), Math.floor(s / 2));
-                    c.fillRect(Math.floor(s / 2), Math.floor(s / 2), Math.floor(s / 2), Math.floor(s / 2));
-                },
-                // LINE PATTERNS - New!
+                // LINE PATTERNS
                 'vLine': (c, s) => {
                     c.fillStyle = '#fff';
                     c.fillRect(0, 0, s, s);
@@ -835,6 +809,20 @@
                     c.beginPath();
                     c.moveTo(0, 0);
                     c.lineTo(s, s);
+                    c.stroke();
+                },
+                // X pattern
+                'xLine': (c, s) => {
+                    c.fillStyle = '#fff';
+                    c.fillRect(0, 0, s, s);
+                    c.strokeStyle = '#000';
+                    c.lineWidth = lineW;
+                    c.lineCap = 'square';
+                    c.beginPath();
+                    c.moveTo(0, 0);
+                    c.lineTo(s, s);
+                    c.moveTo(s, 0);
+                    c.lineTo(0, s);
                     c.stroke();
                 }
             };
