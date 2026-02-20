@@ -204,16 +204,17 @@
             justify-content: flex-end;
         }
 
-        .control-side.staggered {
-            align-items: stretch;
+        .control-side.staggered-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            align-items: center;
+            justify-items: center;
         }
 
-        .control-row.stagger-left {
-            justify-content: flex-start;
-        }
-
-        .control-row.stagger-right {
-            justify-content: flex-end;
+        .control-side.staggered-grid .spacer {
+            width: 80px;
+            height: 80px;
         }
 
         .ctrl-btn.pause-btn {
@@ -502,17 +503,14 @@
             </div>
         </div>
 
-        <!-- Right Hand: Pause + Rotation (staggered layout) -->
-        <div class="control-side right staggered">
-            <div class="control-row stagger-left">
-                <button class="ctrl-btn pause-btn" id="pauseBtn">||</button>
-            </div>
-            <div class="control-row stagger-right">
-                <button class="ctrl-btn rotate-cw" id="rotateCwBtn">↻</button>
-            </div>
-            <div class="control-row stagger-left">
-                <button class="ctrl-btn rotate-ccw" id="rotateCcwBtn">↺</button>
-            </div>
+        <!-- Right Hand: Pause + Rotation (staggered grid layout) -->
+        <div class="control-side right staggered-grid">
+            <button class="ctrl-btn pause-btn" id="pauseBtn">||</button>
+            <div class="spacer"></div>
+            <div class="spacer"></div>
+            <button class="ctrl-btn rotate-cw" id="rotateCwBtn">↻</button>
+            <button class="ctrl-btn rotate-ccw" id="rotateCcwBtn">↺</button>
+            <div class="spacer"></div>
         </div>
     </div>
 
