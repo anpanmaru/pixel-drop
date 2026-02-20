@@ -788,7 +788,7 @@
                     c.fillRect(0, 0, s, s);
                     c.fillStyle = '#000';
                     c.beginPath();
-                    c.arc(s / 2, s / 2, s / 4, 0, Math.PI * 2);
+                    c.arc(Math.floor(s / 2), Math.floor(s / 2), s / 6, 0, Math.PI * 2);
                     c.fill();
                 },
                 // Checker pattern
@@ -1321,6 +1321,7 @@
 
         function togglePause() {
             if (!gameRunning) return;
+            if (navigator.vibrate) navigator.vibrate(10);
             paused = !paused;
             
             if (paused) {
@@ -1363,6 +1364,7 @@
 
         function startMoveLeft() {
             if (leftInterval) return;
+            if (navigator.vibrate) navigator.vibrate(10);
             moveLeft();
             leftInterval = setInterval(moveLeft, moveRepeatDelay);
         }
@@ -1376,6 +1378,7 @@
 
         function startMoveRight() {
             if (rightInterval) return;
+            if (navigator.vibrate) navigator.vibrate(10);
             moveRight();
             rightInterval = setInterval(moveRight, moveRepeatDelay);
         }
@@ -1451,15 +1454,24 @@
 
 
         document.getElementById('rotateCwBtn').addEventListener('click', () => {
-            if (gameRunning && !paused) rotatePiece(true); // Clockwise (順転)
+            if (gameRunning && !paused) {
+                if (navigator.vibrate) navigator.vibrate(10);
+                rotatePiece(true); // Clockwise (順転)
+            }
         });
 
         document.getElementById('rotateCcwBtn').addEventListener('click', () => {
-            if (gameRunning && !paused) rotatePiece(false); // Counter-clockwise (反転)
+            if (gameRunning && !paused) {
+                if (navigator.vibrate) navigator.vibrate(10);
+                rotatePiece(false); // Counter-clockwise (反転)
+            }
         });
 
         document.getElementById('dropBtn').addEventListener('click', () => {
-            if (gameRunning && !paused) hardDrop();
+            if (gameRunning && !paused) {
+                if (navigator.vibrate) navigator.vibrate(15);
+                hardDrop();
+            }
         });
 
         // Keyboard controls (for desktop)
