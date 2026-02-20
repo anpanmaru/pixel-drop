@@ -218,27 +218,26 @@
 
         .control-side.staggered-grid {
             display: grid;
-            grid-template-columns: 85px 85px;
-            grid-template-rows: 85px 85px;
+            grid-template-columns: 50px 85px;
+            grid-template-rows: 50px 85px;
             gap: 8px;
             align-items: center;
             justify-items: center;
         }
 
         .control-side.staggered-grid .spacer.large {
-            width: 85px;
-            height: 85px;
+            display: none;
         }
 
         .ctrl-btn.pause-btn {
+            grid-column: 1;
+            grid-row: 1;
             width: 44px;
             height: 44px;
             font-size: 11px;
             font-weight: 800;
             letter-spacing: 2px;
             border-radius: 50%;
-            justify-self: start;
-            align-self: start;
         }
 
         .control-row {
@@ -322,13 +321,13 @@
         }
 
         .ctrl-btn.rotate-cw {
-            justify-self: end;
-            align-self: start;
+            grid-column: 2;
+            grid-row: 1;
         }
 
         .ctrl-btn.rotate-ccw {
-            justify-self: start;
-            align-self: end;
+            grid-column: 1;
+            grid-row: 2;
         }
 
         .ctrl-btn.move {
@@ -608,13 +607,12 @@
         </div>
 
         <!-- Right Hand: Pause + Rotation (staggered grid layout) -->
+        <!-- Grid: row1=[pause, rotate-cw], row2=[rotate-ccw, empty] -->
         <div class="control-side right staggered-grid">
             <button class="ctrl-btn pause-btn" id="pauseBtn">||</button>
             <button class="ctrl-btn rotate-cw" id="rotateCwBtn">↻</button>
             <button class="ctrl-btn rotate-ccw" id="rotateCcwBtn">↺</button>
-            <div class="spacer large"></div>
         </div>
-        <!-- Grid: row1=[pause, rotate-cw], row2=[rotate-ccw, spacer] -->
     </div>
 
     <!-- Bonus Popup -->
