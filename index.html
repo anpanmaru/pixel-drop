@@ -974,14 +974,15 @@
                 BLOCK_SIZE = Math.floor(Math.min(maxBlockByHeight, maxBlockByWidth) * 0.8);
                 BLOCK_SIZE = Math.max(BLOCK_SIZE, 20); // Minimum for PC
             } else {
-                // Mobile: Account for controls
-                availableHeight = mainContainer.clientHeight - 16;
-                availableWidth = window.innerWidth - 160;
+                // Mobile: Account for controls and side panels
+                const controlsHeight = controls ? 220 : 200; // Estimated controls height
+                availableHeight = window.innerHeight - controlsHeight - 40; // Top padding + controls
+                availableWidth = window.innerWidth - 140; // Side panels
                 
                 const maxBlockByHeight = Math.floor(availableHeight / BOARD_HEIGHT);
                 const maxBlockByWidth = Math.floor(availableWidth / BOARD_WIDTH);
                 
-                BLOCK_SIZE = Math.min(maxBlockByHeight, maxBlockByWidth, 32);
+                BLOCK_SIZE = Math.min(maxBlockByHeight, maxBlockByWidth);
                 BLOCK_SIZE = Math.max(BLOCK_SIZE, 16); // Minimum size
             }
             
