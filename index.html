@@ -1838,10 +1838,13 @@
         // Title screen start button
         startBtn.addEventListener('click', () => {
             if (navigator.vibrate) navigator.vibrate(15);
+            // ゲームを初期化（描画はされるが一時停止状態）
+            init();
+            paused = true;
             hideTitleScreen();
-            // UIが落ちてくるのを待ってからゲーム開始
+            // アニメーション完了後にゲーム開始
             setTimeout(() => {
-                init();
+                paused = false;
             }, 800);
         });
 
