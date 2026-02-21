@@ -1,4 +1,4 @@
-e<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -684,16 +684,25 @@ e<!DOCTYPE html>
 
         /* PC View - Hide touch controls, show keyboard hints */
         @media (min-width: 900px) and (hover: hover) {
+            body {
+                justify-content: center;
+            }
+            
             .controls {
                 display: none !important;
             }
             
             .keyboard-hints {
                 display: flex !important;
+                position: fixed;
+                bottom: 24px;
+                left: 0;
+                right: 0;
             }
             
             .main-container {
-                padding-top: 40px;
+                flex: none;
+                padding-top: 0;
             }
             
             #gameCanvas {
