@@ -907,25 +907,29 @@
             titleScreen.classList.remove('hidden');
             document.querySelector('.main-container').style.display = 'none';
             document.querySelector('.controls').style.display = 'none';
+            document.querySelector('.keyboard-hints').style.display = 'none';
         }
         
         function hideTitleScreen() {
             titleScreen.classList.add('hidden');
             const mainContainer = document.querySelector('.main-container');
             const controls = document.querySelector('.controls');
+            const keyboardHints = document.querySelector('.keyboard-hints');
+            const isPC = window.innerWidth >= 900 && window.matchMedia('(hover: hover)').matches;
             
             // Remove previous animation classes
             mainContainer.classList.remove('drop-in');
             controls.classList.remove('drop-in');
             
             mainContainer.style.display = 'flex';
-            controls.style.display = 'flex';
+            controls.style.display = isPC ? 'none' : 'flex';
+            keyboardHints.style.display = isPC ? 'flex' : 'none';
             
             // Trigger reflow to restart animation
             void mainContainer.offsetWidth;
             
             mainContainer.classList.add('drop-in');
-            controls.classList.add('drop-in');
+            if (!isPC) controls.classList.add('drop-in');
         }
 
         // DOM Elements
