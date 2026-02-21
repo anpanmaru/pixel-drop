@@ -98,8 +98,12 @@
             border-radius: 8px;
             padding: 4px 6px;
             text-align: center;
-            min-width: 50px;
+            min-width: 60px;
             width: auto;
+        }
+        
+        .stat-item.score {
+            min-width: 70px;
         }
 
         .stat-label {
@@ -786,6 +790,10 @@
                 border-radius: 12px;
             }
             
+            .stat-item.score {
+                min-width: 100px;
+            }
+            
             .stat-label {
                 font-size: 0.65rem;
                 letter-spacing: 1px;
@@ -866,7 +874,7 @@
         <!-- Left Side Panel: Stats + Next -->
         <!-- Left Side Panel: Stats -->
         <div class="side-panel left">
-            <div class="stat-item">
+            <div class="stat-item score">
                 <div class="stat-label">Score</div>
                 <div class="stat-value" id="scoreValue">0</div>
             </div>
