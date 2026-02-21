@@ -1907,19 +1907,30 @@
         downBtn.addEventListener('mouseleave', stopSoftDrop);
 
 
-        document.getElementById('rotateCwBtn').addEventListener('click', () => {
+        // Rotation buttons with touchstart for faster response
+        const rotateCwBtn = document.getElementById('rotateCwBtn');
+        const rotateCcwBtn = document.getElementById('rotateCcwBtn');
+        
+        function handleRotateCw(e) {
+            e.preventDefault();
             if (gameRunning && !paused) {
                 if (navigator.vibrate) navigator.vibrate(10);
                 rotatePiece(true); // Clockwise (順転)
             }
-        });
-
-        document.getElementById('rotateCcwBtn').addEventListener('click', () => {
+        }
+        
+        function handleRotateCcw(e) {
+            e.preventDefault();
             if (gameRunning && !paused) {
                 if (navigator.vibrate) navigator.vibrate(10);
                 rotatePiece(false); // Counter-clockwise (反転)
             }
-        });
+        }
+        
+        rotateCwBtn.addEventListener('touchstart', handleRotateCw, { passive: false });
+        rotateCwBtn.addEventListener('click', handleRotateCw);
+        rotateCcwBtn.addEventListener('touchstart', handleRotateCcw, { passive: false });
+        rotateCcwBtn.addEventListener('click', handleRotateCcw);
 
         document.getElementById('dropBtn').addEventListener('click', () => {
             if (gameRunning && !paused) {
@@ -1988,9 +1999,12 @@
             }
         }, { passive: false });
         
-        // Prevent double-tap zoom
+        // Prevent double-tap zoom (but allow buttons)
         let lastTouchEnd = 0;
         document.addEventListener('touchend', (e) => {
+            // Don't prevent on buttons
+            if (e.target.closest('button, .ctrl-btn')) return;
+            
             const now = Date.now();
             if (now - lastTouchEnd <= 300) {
                 e.preventDefault();
