@@ -15,6 +15,11 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
             outline: none;
+            -webkit-touch-callout: none;
+        }
+        
+        button, .ctrl-btn {
+            touch-action: none;
         }
 
         html, body {
@@ -1834,6 +1839,16 @@
             if (e.target === document.body) {
                 e.preventDefault();
             }
+        }, { passive: false });
+        
+        // Prevent double-tap zoom
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
         }, { passive: false });
 
         // Title screen start button
