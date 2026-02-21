@@ -921,23 +921,39 @@
         function calculateBlockSize() {
             const mainContainer = document.querySelector('.main-container');
             const controls = document.querySelector('.controls');
-            const controlsHeight = controls ? controls.offsetHeight : 200;
+            const isPC = window.innerWidth >= 900 && window.matchMedia('(hover: hover)').matches;
             
-            // Available space: full width minus side panels, height minus controls
-            const availableHeight = mainContainer.clientHeight - 16;
-            const availableWidth = window.innerWidth - 160; // Account for side panels
+            // Available space calculation
+            let availableHeight, availableWidth;
             
-            const maxBlockByHeight = Math.floor(availableHeight / BOARD_HEIGHT);
-            const maxBlockByWidth = Math.floor(availableWidth / BOARD_WIDTH);
-            
-            BLOCK_SIZE = Math.min(maxBlockByHeight, maxBlockByWidth, 32);
-            BLOCK_SIZE = Math.max(BLOCK_SIZE, 16); // Minimum size
+            if (isPC) {
+                // PC: Use more screen space, account for keyboard hints
+                availableHeight = window.innerHeight - 140; // Space for hints at bottom
+                availableWidth = window.innerWidth - 300; // Side panels
+                
+                const maxBlockByHeight = Math.floor(availableHeight / BOARD_HEIGHT);
+                const maxBlockByWidth = Math.floor(availableWidth / BOARD_WIDTH);
+                
+                // PC: No upper limit, let it scale with screen
+                BLOCK_SIZE = Math.min(maxBlockByHeight, maxBlockByWidth);
+                BLOCK_SIZE = Math.max(BLOCK_SIZE, 20); // Minimum for PC
+            } else {
+                // Mobile: Account for controls
+                availableHeight = mainContainer.clientHeight - 16;
+                availableWidth = window.innerWidth - 160;
+                
+                const maxBlockByHeight = Math.floor(availableHeight / BOARD_HEIGHT);
+                const maxBlockByWidth = Math.floor(availableWidth / BOARD_WIDTH);
+                
+                BLOCK_SIZE = Math.min(maxBlockByHeight, maxBlockByWidth, 32);
+                BLOCK_SIZE = Math.max(BLOCK_SIZE, 16); // Minimum size
+            }
             
             canvas.width = BOARD_WIDTH * BLOCK_SIZE;
             canvas.height = BOARD_HEIGHT * BLOCK_SIZE;
             
-            // Smaller next piece preview
-            const nextBlockSize = Math.min(Math.floor(BLOCK_SIZE * 0.6), 16);
+            // Next piece preview - larger on PC
+            const nextBlockSize = isPC ? Math.min(Math.floor(BLOCK_SIZE * 0.7), 24) : Math.min(Math.floor(BLOCK_SIZE * 0.6), 16);
             nextCanvas.width = 4 * nextBlockSize;
             nextCanvas.height = 4 * nextBlockSize;
         }
