@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+e<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -681,6 +681,58 @@
                 margin: 0 auto;
             }
         }
+
+        /* PC View - Hide touch controls, show keyboard hints */
+        @media (min-width: 900px) and (hover: hover) {
+            .controls {
+                display: none !important;
+            }
+            
+            .keyboard-hints {
+                display: flex !important;
+            }
+            
+            .main-container {
+                padding-top: 40px;
+            }
+            
+            #gameCanvas {
+                border-radius: 12px;
+            }
+        }
+
+        /* Keyboard hints - hidden by default (mobile) */
+        .keyboard-hints {
+            display: none;
+            justify-content: center;
+            gap: 24px;
+            padding: 16px;
+            flex-wrap: wrap;
+        }
+
+        .key-hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .key-hint kbd {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 28px;
+            padding: 0 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+        }
     </style>
 </head>
 <body>
@@ -751,6 +803,16 @@
             <button class="ctrl-btn rotate-cw" id="rotateCwBtn">↻</button>
             <button class="ctrl-btn rotate-ccw" id="rotateCcwBtn">↺</button>
         </div>
+    </div>
+
+    <!-- Keyboard Hints (PC only) -->
+    <div class="keyboard-hints">
+        <div class="key-hint"><kbd>←</kbd><kbd>→</kbd> Move</div>
+        <div class="key-hint"><kbd>↓</kbd> Soft Drop</div>
+        <div class="key-hint"><kbd>↑</kbd> Hard Drop</div>
+        <div class="key-hint"><kbd>Space</kbd> Rotate</div>
+        <div class="key-hint"><kbd>⌘</kbd>+<kbd>Space</kbd> Reverse</div>
+        <div class="key-hint"><kbd>Esc</kbd> Pause</div>
     </div>
 
     <!-- Bonus Popup -->
@@ -1654,9 +1716,25 @@
 
         // Keyboard controls (for desktop)
         document.addEventListener('keydown', (e) => {
-            if (!gameRunning || paused) return;
-            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'z', 'Z', 'x', 'X'].includes(e.key)) {
+            // Escape can toggle pause anytime
+            if (e.key === 'Escape' && gameRunning) {
                 e.preventDefault();
+                togglePause();
+                return;
+            }
+            
+            if (!gameRunning || paused) return;
+            
+            // Prevent default for game keys
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+                e.preventDefault();
+            }
+            
+            // Command+Space for counter-clockwise rotation
+            if (e.key === ' ' && e.metaKey) {
+                e.preventDefault();
+                rotatePiece(false); // Counter-clockwise
+                return;
             }
             
             switch (e.key) {
@@ -1674,17 +1752,7 @@
                     hardDrop();
                     break;
                 case ' ':
-                case 'x':
-                case 'X':
                     rotatePiece(true); // Clockwise
-                    break;
-                case 'z':
-                case 'Z':
-                    rotatePiece(false); // Counter-clockwise
-                    break;
-                case 'p':
-                case 'P':
-                    togglePause();
                     break;
             }
         });
